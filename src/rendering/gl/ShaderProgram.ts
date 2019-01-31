@@ -30,6 +30,11 @@ class ShaderProgram {
   unifViewProj: WebGLUniformLocation;
   unifColor: WebGLUniformLocation;
   unifPlanePos: WebGLUniformLocation;
+  unifTime: WebGLUniformLocation;
+  unifTerrainScale: WebGLUniformLocation;
+  unifTerrainSharpness: WebGLUniformLocation;
+
+  time: number = 0.0;
 
   constructor(shaders: Array<Shader>) {
     this.prog = gl.createProgram();
@@ -49,6 +54,12 @@ class ShaderProgram {
     this.unifModelInvTr = gl.getUniformLocation(this.prog, "u_ModelInvTr");
     this.unifViewProj   = gl.getUniformLocation(this.prog, "u_ViewProj");
     this.unifPlanePos   = gl.getUniformLocation(this.prog, "u_PlanePos");
+    this.unifTime       = gl.getUniformLocation(this.prog, "u_Time");
+    this.unifTerrainScale = gl.getUniformLocation(this.prog, "u_TerrainScale");
+    this.unifTerrainSharpness = gl.getUniformLocation(this.prog, "u_TerrainSharpness");
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   }
 
   use() {
@@ -83,6 +94,33 @@ class ShaderProgram {
     this.use();
     if (this.unifPlanePos !== -1) {
       gl.uniform2fv(this.unifPlanePos, pos);
+    }
+  }
+
+  incrementTime()
+  {
+    this.use();
+    if (this.unifTime !== -1)
+    {
+      gl.uniform1f(this.unifTime, this.time++);
+    }
+  }
+
+  setTerrainScale(scale: number)
+  {
+    this.use();
+    if (this.unifTerrainScale !== -1)
+    {
+      gl.uniform1f(this.unifTerrainScale, scale);
+    }
+  }
+
+  setTarrainSharpness(sharpness: number)
+  {
+    this.use();
+    if (this.unifTerrainSharpness !== -1)
+    {
+      gl.uniform1f(this.unifTerrainSharpness, sharpness);
     }
   }
 
