@@ -1,0 +1,1 @@
+I adapted examples from The Book of Shaders in some of my own shaders. The specific examples are referenced in the files they are used.
